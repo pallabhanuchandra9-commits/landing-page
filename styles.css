@@ -1,0 +1,1508 @@
+/*
+  ============================================================
+  FILE: styles.css
+  PURPOSE: All visual styling for the DRAPE landing page
+
+  CSS FUNDAMENTALS — HOW STYLES WORK
+  ============================================================
+  CSS (Cascading Style Sheets) controls the visual appearance
+  of every HTML element. Each CSS rule follows this pattern:
+
+    selector {
+      property: value;
+    }
+
+  SELECTOR  — which HTML element(s) to style
+  PROPERTY  — which visual trait to change (color, font, size...)
+  VALUE     — the new setting for that property
+
+  THE CASCADE:
+  "Cascading" means rules can overlap; more specific rules win.
+  Order of priority (lowest → highest):
+    1. Browser default styles
+    2. External stylesheet (this file)
+    3. Inline styles (style="" on an element)
+    4. !important declarations
+
+  TABLE OF CONTENTS
+  ─────────────────
+  1.  Design Tokens (Custom Properties)
+  2.  CSS Reset & Base Styles
+  3.  Typography Scale
+  4.  Layout Utilities (.container, .section-header)
+  5.  Buttons
+  6.  Header & Navigation
+  7.  Hero Section
+  8.  Trust Strip
+  9.  Products Section
+  10. Features Section
+  11. About Section
+  12. CTA Section
+  13. Footer
+  14. Responsive Design (Media Queries)
+  15. Animations & Transitions
+  ============================================================
+*/
+
+
+/* ============================================================
+  1. DESIGN TOKENS — CSS Custom Properties (Variables)
+  ============================================================
+  Custom properties (--variable-name) store reusable values.
+  Defined on :root = available everywhere in the stylesheet.
+  
+  WHY USE VARIABLES?
+  • Change one value → updates everywhere it's used
+  • Creates a consistent design system
+  • Makes theming (dark mode etc.) much easier
+  
+  NAMING CONVENTION: --category-variant
+  (e.g. --color-text-muted, --spacing-lg)
+============================================================ */
+:root {
+
+  /* ── COLOUR PALETTE ── */
+  /* The brand palette is warm, earthy, and sophisticated —
+     inspired by natural linen and raw cotton textures. */
+  --color-bg:          #FAF8F5;   /* Off-white page background */
+  --color-surface:     #FFFFFF;   /* Card/panel backgrounds */
+  --color-surface-alt: #F2EDE6;   /* Alternate section backgrounds */
+  --color-border:      #E5DDD5;   /* Borders and dividers */
+
+  --color-ink:         #1A1410;   /* Primary text — near black */
+  --color-ink-muted:   #6B5C4E;   /* Secondary/muted text */
+  --color-ink-light:   #9E8E82;   /* Placeholder / fine print */
+
+  --color-accent:      #C4622D;   /* Brand accent — burnt terracotta */
+  --color-accent-dark: #A34E22;   /* Darker accent for hover states */
+  --color-accent-soft: #F5E6DC;   /* Very light accent for backgrounds */
+
+  --color-white:       #FFFFFF;
+  --color-black:       #0D0A08;
+
+  /* Status colours */
+  --color-sale:        #C0392B;   /* Sale badge / reduced prices */
+  --color-new:         #2D7A4F;   /* New badge / new arrivals */
+
+  /* ── TYPOGRAPHY ── */
+  /* Two-font system:
+     • Display face: Playfair Display — elegant serif for headings
+     • Body face:    Inter — modern sans-serif for readable body text
+  */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+
+  /* TYPE SCALE — modular scale (~1.25 ratio) */
+  --text-xs:   0.75rem;    /* 12px — fine print */
+  --text-sm:   0.875rem;   /* 14px — small labels */
+  --text-base: 1rem;       /* 16px — body text */
+  --text-md:   1.125rem;   /* 18px — large body */
+  --text-lg:   1.375rem;   /* 22px — small headings */
+  --text-xl:   1.75rem;    /* 28px — section headings */
+  --text-2xl:  2.25rem;    /* 36px — large headings */
+  --text-3xl:  3rem;       /* 48px — hero headline */
+  --text-4xl:  4rem;       /* 64px — display headline */
+
+  /* ── SPACING ── */
+  /* Consistent spacing scale prevents ad-hoc padding/margin values */
+  --space-1:  0.25rem;    /* 4px  */
+  --space-2:  0.5rem;     /* 8px  */
+  --space-3:  0.75rem;    /* 12px */
+  --space-4:  1rem;       /* 16px */
+  --space-5:  1.25rem;    /* 20px */
+  --space-6:  1.5rem;     /* 24px */
+  --space-8:  2rem;       /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+  --space-16: 4rem;       /* 64px */
+  --space-20: 5rem;       /* 80px */
+  --space-24: 6rem;       /* 96px */
+
+  /* ── LAYOUT ── */
+  --max-width: 1200px;    /* Max page width — centered on wide screens */
+  --header-h:  70px;      /* Fixed header height (used for scroll offset) */
+
+  /* ── BORDERS & RADIUS ── */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-full: 9999px;  /* Fully rounded (pill shape) */
+
+  /* ── SHADOWS ── */
+  /* Box shadows add depth. Layered shadows look more natural. */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.07);
+
+  /* ── TRANSITIONS ── */
+  /* Reusable timing functions for smooth hover/focus animations */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+
+/* ============================================================
+  2. CSS RESET & BASE STYLES
+  ============================================================
+  Browsers have built-in default styles that differ from each
+  other (Chrome vs Firefox vs Safari). A CSS "reset" or
+  "normalize" removes or overrides these inconsistencies so
+  our design starts from a clean, predictable baseline.
+============================================================ */
+
+/*
+  BOX SIZING: border-box
+  ────────────────────────
+  By default, CSS "box-sizing" is "content-box":
+    width = content only (padding and border ADD to the total)
+  
+  With "border-box":
+    width = total width (padding and border INCLUDED in total)
+  
+  border-box is much more intuitive for layout.
+  
+  The * selector applies to ALL elements.
+  *::before and *::after apply to pseudo-elements too.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;    /* Remove all default margins */
+  padding: 0;   /* Remove all default paddings */
+}
+
+/* BASE BODY STYLES */
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
+  line-height: 1.65;          /* Comfortable reading line spacing */
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+
+  /* Improve font rendering on macOS/iOS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /*
+    Scroll behavior: scroll-padding-top accounts for the fixed header
+    so that anchor links (#products) don't hide content behind it.
+  */
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+}
+
+/* IMAGES: Prevent images from ever overflowing their containers */
+img {
+  max-width: 100%;   /* Never wider than the parent element */
+  display: block;    /* Remove the small gap below inline images */
+  height: auto;      /* Maintain aspect ratio when width changes */
+}
+
+/* LINKS: Remove default underline styling (we'll add our own) */
+a {
+  color: inherit;           /* Inherit text color from parent */
+  text-decoration: none;    /* Remove default underline */
+}
+
+/* LISTS: Remove bullet points and indentation from nav/footer lists */
+ul {
+  list-style: none;
+}
+
+/* BUTTONS: Reset browser button defaults */
+button {
+  cursor: pointer;          /* Show hand cursor on hover */
+  border: none;
+  background: none;
+  font-family: inherit;     /* Use page font, not system font */
+  font-size: inherit;
+}
+
+/* SCREEN READER ONLY — hide visually, keep accessible */
+/* Used for labels like <label class="sr-only"> */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* FOCUS VISIBLE: Restore focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+
+/* ============================================================
+  3. TYPOGRAPHY SCALE
+  ============================================================
+  Heading styles applied to all h1–h4 tags globally.
+  We use the display font only for headings.
+============================================================ */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;         /* Tighter line height for large text */
+  color: var(--color-ink);
+}
+
+h1 { font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl)); }
+/* clamp(min, preferred, max) — fluid scaling between breakpoints */
+
+h2 { font-size: clamp(var(--text-xl), 3.5vw, var(--text-3xl)); }
+h3 { font-size: var(--text-lg); }
+h4 { font-size: var(--text-md); }
+
+p {
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-4);
+}
+
+p:last-child { margin-bottom: 0; }
+
+
+/* ============================================================
+  4. LAYOUT UTILITIES
+  ============================================================
+  Reusable structural classes used throughout the page.
+============================================================ */
+
+/*
+  .container — The main width constraint wrapper
+  Centers content and limits max width with horizontal padding
+  so content doesn't touch screen edges on small devices.
+  
+  This pattern is used on nearly every section:
+  <section>
+    <div class="container">
+      ... content here ...
+    </div>
+  </section>
+*/
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;      /* Centers horizontally (shorthand for left+right) */
+  padding-inline: var(--space-6); /* 24px horizontal padding */
+}
+
+/*
+  SECTION PADDING
+  All <section> tags get consistent top/bottom space.
+  The individual section overrides can tighten or expand this.
+*/
+section {
+  padding-block: var(--space-20); /* 80px top and bottom */
+}
+
+/* Alternating section backgrounds for visual rhythm */
+section:nth-child(even) {
+  background-color: var(--color-surface-alt);
+}
+
+/*
+  .section-header — The repeating title block above each section's content
+  Always centred, with consistent spacing below it.
+*/
+.section-header {
+  text-align: center;
+  max-width: 600px;
+  margin-inline: auto;      /* Centers the header block */
+  margin-bottom: var(--space-12); /* Space between header and content */
+}
+
+/*
+  .section-eyebrow — The small label above section titles
+  E.g., "New Arrivals", "Why DRAPE"
+  Styled as all-caps, letter-spaced, accent coloured
+*/
+.section-eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;    /* 12% of font size — makes all-caps readable */
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.section-title {
+  margin-bottom: var(--space-4);
+}
+
+.section-desc {
+  font-size: var(--text-md);
+  color: var(--color-ink-muted);
+  margin-bottom: 0;
+}
+
+/* .section-footer — The centered "View All" link below a section grid */
+.section-footer {
+  text-align: center;
+  margin-top: var(--space-10);
+}
+
+
+/* ============================================================
+  5. BUTTONS
+  ============================================================
+  A button system with three variants:
+    .btn-primary — filled accent colour (primary action)
+    .btn-ghost   — transparent with white border (hero secondary)
+    .btn-outline — transparent with dark border (on light bg)
+  
+  All share the base .btn class for shared sizing/shape.
+============================================================ */
+
+/* BASE BUTTON — shared by all variants */
+.btn {
+  display: inline-flex;       /* Flex to align icon + text */
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  white-space: nowrap;        /* Prevent button text from wrapping */
+  border: 2px solid transparent;
+}
+
+/* PRIMARY: Filled accent background */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+  /* transform: translateY() lifts the button on hover — subtle depth cue */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* GHOST: Transparent with white border — for dark backgrounds (hero) */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-white);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--color-white);
+}
+
+/* OUTLINE: Transparent with dark border — for light backgrounds */
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+  6. HEADER & NAVIGATION
+  ============================================================
+  Fixed header that stays at the top as you scroll.
+  Changes from transparent to solid on scroll (via JS class).
+============================================================ */
+#main-header {
+  position: fixed;          /* Stays fixed on scroll */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-h);
+  z-index: 1000;            /* Sits above all page content */
+  transition: background-color var(--transition-base),
+              box-shadow var(--transition-base);
+  background-color: transparent; /* Starts transparent over hero */
+}
+
+/*
+  .scrolled is added by JavaScript when the user scrolls past 80px.
+  This turns the transparent header into a solid white bar.
+*/
+#main-header.scrolled {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+/* HEADER INNER: Three-column flex layout
+   [Logo] ─────── [Nav Links] ─────── [Actions]
+*/
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* LOGO */
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-white); /* White on transparent hero bg */
+  transition: color var(--transition-base);
+}
+
+/* When header becomes solid, logo turns dark */
+#main-header.scrolled .logo {
+  color: var(--color-ink);
+}
+
+/* NAV LINKS: Horizontal list on desktop */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);       /* Space between each nav item */
+}
+
+.nav-links a {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color var(--transition-fast);
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent; /* Invisible border — becomes visible on hover */
+}
+
+.nav-links a:hover {
+  color: var(--color-white);
+  border-bottom-color: var(--color-white);
+}
+
+#main-header.scrolled .nav-links a {
+  color: var(--color-ink-muted);
+}
+
+#main-header.scrolled .nav-links a:hover {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* Special CTA link in nav — styled as a pill button */
+.nav-links .nav-cta {
+  padding: var(--space-2) var(--space-5);
+  background-color: var(--color-accent);
+  color: var(--color-white) !important;
+  border-radius: var(--radius-full);
+  border-bottom: none !important;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.nav-links .nav-cta:hover {
+  background-color: var(--color-accent-dark);
+  transform: translateY(-1px);
+}
+
+/* HEADER ACTIONS: Cart + hamburger group */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Cart button */
+.cart-btn {
+  position: relative;   /* Needed for absolute badge positioning */
+  color: var(--color-white);
+  transition: color var(--transition-fast);
+  padding: var(--space-2);
+}
+
+#main-header.scrolled .cart-btn {
+  color: var(--color-ink);
+}
+
+.cart-btn:hover {
+  color: var(--color-accent);
+}
+
+/* Cart item count badge — small red dot with number */
+.cart-count {
+  position: absolute;   /* Positioned relative to .cart-btn */
+  top: -2px;
+  right: -4px;
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: var(--radius-full);
+  min-width: 18px;
+  text-align: center;
+}
+
+/* HAMBURGER BUTTON — only shown on mobile (hidden on desktop) */
+.hamburger {
+  display: none;       /* Hidden by default; shown in media query */
+  flex-direction: column;
+  gap: 5px;
+  padding: var(--space-2);
+}
+
+/* Each hamburger line */
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-white);
+  transition: transform var(--transition-base),
+              opacity var(--transition-base);
+  transform-origin: center;
+}
+
+#main-header.scrolled .hamburger span {
+  background-color: var(--color-ink);
+}
+
+/* Hamburger → X animation when .open class is applied by JS */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ============================================================
+  7. HERO SECTION
+  ============================================================
+  Full-viewport hero with a background image, overlay,
+  and centred content.
+============================================================ */
+#hero {
+  /* 
+    min-height: 100vh = at least full viewport height.
+    Viewport Height unit (vh): 1vh = 1% of the browser window height.
+    100vh = the full visible window height.
+  */
+  min-height: 100vh;
+  background-size: cover;       /* Cover the entire section area */
+  background-position: center;  /* Focus on the centre of the image */
+  background-attachment: fixed; /* Parallax effect — image stays while content scrolls */
+  display: flex;
+  align-items: center;          /* Vertically center content */
+  padding-top: var(--header-h); /* Account for fixed header height */
+  position: relative;           /* Context for overlay child positioning */
+  padding-block: 0;             /* Override general section padding */
+}
+
+/*
+  Hero Overlay — a semi-transparent dark layer over the bg image.
+  Makes white text legible regardless of the image content.
+  
+  position: absolute = positioned relative to #hero (its parent).
+  inset: 0 = top/right/bottom/left all 0 (fills the parent completely).
+*/
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 10, 5, 0.72) 0%,
+    rgba(15, 10, 5, 0.40) 60%,
+    rgba(15, 10, 5, 0.25) 100%
+  );
+}
+
+/* Hero Content — sits ABOVE the overlay using z-index */
+.hero-content {
+  position: relative;
+  z-index: 1;                   /* Above overlay (z-index: 0) */
+  max-width: 700px;
+  padding-block: var(--space-24); /* 96px top and bottom */
+}
+
+/* Eyebrow label */
+.hero-eyebrow {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-5);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+}
+
+/* Hero Headline */
+.hero-title {
+  font-size: clamp(var(--text-2xl), 6vw, var(--text-4xl));
+  font-weight: 700;
+  color: var(--color-white);
+  margin-bottom: var(--space-6);
+  line-height: 1.12;
+}
+
+/* <em> inside hero title — italic, accent-tinted */
+.hero-title em {
+  font-style: italic;
+  color: #F5C4A0; /* Warm peach — complementary to the accent terracotta */
+}
+
+.hero-subtitle {
+  font-size: var(--text-md);
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 480px;
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+
+/* Hero CTA buttons row */
+.hero-actions {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;  /* Wrap to next line on very small screens */
+}
+
+
+/* ============================================================
+  8. TRUST STRIP
+  ============================================================
+  Horizontal band of 4 metrics.
+  CSS Grid with 4 equal columns + dividers between them.
+============================================================ */
+#trust {
+  background-color: var(--color-ink);  /* Dark background */
+  color: var(--color-white);
+  padding-block: var(--space-12);
+}
+
+/* 
+  CSS GRID: A two-dimensional layout system.
+  We need: [stat] [divider] [stat] [divider] [stat] [divider] [stat]
+  That's 7 columns — 4 stats and 3 dividers.
+  
+  "1fr" = 1 fraction of the available space.
+  "auto" = shrinks to the content (for narrow dividers).
+*/
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) ;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.trust-item {
+  display: flex;
+  flex-direction: column;  /* Stack number above label */
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+}
+
+.trust-number {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-xl), 3.5vw, var(--text-3xl));
+  font-weight: 700;
+  color: var(--color-white);
+  line-height: 1;
+}
+
+/* '+' suffix added via CSS pseudo-element to avoid affecting JS counter */
+.trust-number:not(.static)::after {
+  content: '+';
+  font-size: 0.65em;           /* Smaller than the number */
+  vertical-align: super;       /* Superscript position */
+  opacity: 0.7;
+}
+
+.trust-label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Vertical divider between stats */
+.trust-divider {
+  width: 1px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.15);
+  justify-self: center;
+}
+
+
+/* ============================================================
+  9. PRODUCTS SECTION
+  ============================================================
+  CSS Grid for the product card layout.
+  Cards have hover effects and image zoom.
+============================================================ */
+#products {
+  background-color: var(--color-bg);
+}
+
+/*
+  PRODUCT GRID
+  ────────────
+  auto-fill: creates as many columns as fit.
+  minmax(240px, 1fr): each column is at least 240px wide, max 1 fraction.
+  This creates a fluid responsive grid — no media queries needed!
+*/
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-6);
+}
+
+/* PRODUCT CARD */
+.product-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;           /* Clips the image zoom effect to rounded corners */
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base),
+              transform var(--transition-base);
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);  /* Card lifts on hover */
+  box-shadow: var(--shadow-lg);
+}
+
+/* IMAGE CONTAINER — position: relative so badge & button can overlap */
+.card-image-wrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;       /* Forces 4:5 portrait ratio for all images */
+  background-color: var(--color-surface-alt);
+}
+
+.card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* Covers the area without stretching */
+  transition: transform var(--transition-slow);
+}
+
+/* Image zoom on card hover */
+.product-card:hover .card-image-wrap img {
+  transform: scale(1.06);
+}
+
+/* BADGE — absolute positioned over the top-left of the image */
+.badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-new {
+  background-color: var(--color-new);
+  color: var(--color-white);
+}
+
+.badge-sale {
+  background-color: var(--color-sale);
+  color: var(--color-white);
+}
+
+/* QUICK ADD BUTTON — hidden by default, slides up on hover */
+.quick-add {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(26, 20, 16, 0.90);
+  color: var(--color-white);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+  transform: translateY(100%);    /* Starts hidden below the image */
+  transition: transform var(--transition-base);
+}
+
+/* Slides up into view when the card is hovered */
+.product-card:hover .quick-add {
+  transform: translateY(0);
+}
+
+/* CARD INFO — text content area below the image */
+.card-info {
+  padding: var(--space-4) var(--space-5);
+}
+
+.card-category {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-light);
+  margin-bottom: var(--space-1);
+}
+
+.card-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: var(--space-2);
+  font-family: var(--font-body); /* Cards use body font — more casual */
+}
+
+/* PRICE ROW */
+.card-price {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.price-current {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.price-current.sale {
+  color: var(--color-sale);    /* Red price when on sale */
+}
+
+.price-original {
+  font-size: var(--text-sm);
+  color: var(--color-ink-light);
+  text-decoration: line-through; /* Strikethrough = was this price */
+}
+
+
+/* ============================================================
+  10. FEATURES SECTION
+  ============================================================
+  3-column grid of feature cards with icon + title + desc.
+============================================================ */
+#features {
+  background-color: var(--color-surface-alt);
+}
+
+/* 3 columns on desktop */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+.feature-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  border: 1px solid var(--color-border);
+  transition: border-color var(--transition-base),
+              box-shadow var(--transition-base),
+              transform var(--transition-base);
+}
+
+.feature-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Icon container — circular accent-tinted background */
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-5);
+  transition: background-color var(--transition-base);
+}
+
+.feature-card:hover .feature-icon {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.feature-title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: var(--space-3);
+  font-family: var(--font-body);
+}
+
+.feature-desc {
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+
+/* ============================================================
+  11. ABOUT SECTION
+  ============================================================
+  Two-column layout: image left, text right.
+============================================================ */
+#about {
+  background-color: var(--color-bg);
+}
+
+/* 
+  Two-column grid, 55/45 split.
+  The image column is slightly larger.
+*/
+.about-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-16);         /* 64px gap between columns */
+  align-items: center;
+}
+
+/* IMAGE COLUMN */
+.about-image-wrap {
+  position: relative;           /* Context for floating accent card */
+}
+
+.about-image {
+  width: 100%;
+  border-radius: var(--radius-xl);
+  object-fit: cover;
+  aspect-ratio: 7 / 8;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Floating accent card overlaid on the image bottom-right */
+.about-accent-card {
+  position: absolute;
+  bottom: var(--space-6);
+  right: calc(-1 * var(--space-6)); /* Hangs outside the image edge */
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.accent-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+
+.accent-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* TEXT COLUMN */
+.about-text .section-eyebrow {
+  text-align: left;
+}
+
+.about-text .section-title {
+  text-align: left;
+  margin-bottom: var(--space-6);
+}
+
+.about-text p {
+  margin-bottom: var(--space-5);
+}
+
+/* Values checklist */
+.about-values {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.about-values li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+/* Checkmark icon in the list */
+.about-values li svg {
+  flex-shrink: 0;    /* Don't let the icon shrink if text wraps */
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+  12. CTA SECTION
+  ============================================================
+  High-contrast dark section with email form.
+  Designed to stand out and convert.
+============================================================ */
+#cta {
+  background-color: var(--color-ink);
+  position: relative;
+  overflow: hidden;     /* Clip the decorative bg text */
+}
+
+/* Decorative oversized background text — adds texture/depth */
+.cta-bg-text {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 20vw;      /* Scales with viewport width */
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.025);  /* Nearly transparent */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none; /* Click-through — doesn't block real content */
+  user-select: none;
+  letter-spacing: 0.05em;
+}
+
+.cta-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 580px;
+  margin-inline: auto;
+}
+
+/* CTA section eyebrow — white variant */
+.section-eyebrow.light {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cta-title {
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+  color: var(--color-white);
+  margin-bottom: var(--space-4);
+}
+
+.cta-subtitle {
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: var(--space-8);
+}
+
+/* EMAIL FORM ROW — input + button side by side */
+.cta-form {
+  display: flex;
+  gap: var(--space-3);
+  max-width: 460px;
+  margin-inline: auto;
+  margin-bottom: var(--space-4);
+}
+
+.cta-form input[type="email"] {
+  flex: 1;                    /* Takes remaining space after the button */
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  outline: none;              /* Remove default focus ring (we style it below) */
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+/* Custom focus style for the email input */
+.cta-form input[type="email"]:focus {
+  border-color: var(--color-accent);
+  background-color: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+/* Placeholder text colour */
+.cta-form input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cta-fine-print {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 0;
+}
+
+
+/* ============================================================
+  13. FOOTER
+  ============================================================
+  Multi-column footer with brand column and link groups.
+============================================================ */
+footer {
+  background-color: var(--color-black);
+  color: rgba(255, 255, 255, 0.65);
+  padding-block: var(--space-16);
+}
+
+/* Override section alternating background for footer */
+footer.section { background-color: var(--color-black); }
+
+/* FOOTER GRID: 4 columns — brand + 3 link columns */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr; /* Brand column is wider */
+  gap: var(--space-12);
+  margin-bottom: var(--space-12);
+}
+
+/* BRAND COLUMN */
+.footer-logo {
+  color: var(--color-white);
+  display: inline-block;
+  margin-bottom: var(--space-4);
+}
+
+.footer-tagline {
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--space-6);
+}
+
+/* SOCIAL LINKS ROW */
+.social-links {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.social-link {
+  color: rgba(255, 255, 255, 0.5);
+  transition: color var(--transition-fast);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.social-link:hover {
+  color: var(--color-white);
+}
+
+/* FOOTER LINK COLUMNS */
+.footer-col-title {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: var(--space-5);
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.footer-links a {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.5);
+  transition: color var(--transition-fast);
+  width: fit-content; /* Only underline the text, not the full row width */
+}
+
+.footer-links a:hover {
+  color: var(--color-white);
+}
+
+/* FOOTER BOTTOM BAR */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.copyright {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-legal {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.footer-legal a {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.3);
+  transition: color var(--transition-fast);
+}
+
+.footer-legal a:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+
+/* ============================================================
+  14. RESPONSIVE DESIGN — MEDIA QUERIES
+  ============================================================
+  Media queries apply styles only when certain conditions are met.
+  
+  Syntax:
+    @media (max-width: VALUE) { ... }
+    — styles apply when screen is NARROWER than VALUE
+  
+  BREAKPOINTS used:
+    1024px — Tablet landscape
+    768px  — Tablet portrait
+    480px  — Mobile
+  
+  We use a MOBILE-FIRST approach in spirit, but these are
+  overrides for simplicity in this educational example.
+============================================================ */
+
+/* ── TABLET (≤ 1024px) ── */
+@media (max-width: 1024px) {
+
+  /* 2-column features grid on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* About section stacks on tablet */
+  .about-inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .about-image {
+    aspect-ratio: 16 / 9;    /* Wider aspect ratio when not beside text */
+    max-height: 420px;
+  }
+
+  /* The floating card would overflow — tuck it inside */
+  .about-accent-card {
+    right: var(--space-6);
+  }
+
+  /* Footer: 2-column grid on tablet */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── MOBILE (≤ 768px) ── */
+@media (max-width: 768px) {
+
+  /* Reduce section padding on mobile */
+  section {
+    padding-block: var(--space-12);
+  }
+
+  /* ── NAVIGATION ──
+     On mobile: navigation links are hidden in a dropdown menu.
+     The hamburger button is shown instead.
+     JavaScript toggles the .open class to show/hide the menu.
+  */
+  .hamburger {
+    display: flex;            /* Show hamburger */
+  }
+
+  /* Nav links: hidden by default, appear as a dropdown */
+  .nav-links {
+    position: fixed;          /* Overlay the whole page */
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-surface);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    opacity: 0;               /* Invisible */
+    pointer-events: none;     /* Not clickable when hidden */
+    transition: opacity var(--transition-base);
+  }
+
+  /* .open class added by JS toggles the menu to visible */
+  .nav-links.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .nav-links a {
+    color: var(--color-ink-muted);
+    font-size: var(--text-lg);
+  }
+
+  .nav-links a:hover {
+    color: var(--color-ink);
+  }
+
+  /* ── HERO ── */
+  .hero-content {
+    padding-block: var(--space-16);
+  }
+
+  .hero-actions {
+    flex-direction: column;   /* Stack buttons vertically */
+    align-items: flex-start;
+  }
+
+  /* ── TRUST STRIP ── */
+  /* Stack stats 2x2 on mobile */
+  .trust-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8) var(--space-4);
+  }
+
+  /* Hide vertical dividers in 2x2 layout */
+  .trust-divider {
+    display: none;
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    grid-template-columns: 1fr;  /* Single column on mobile */
+  }
+
+  /* ── CTA FORM ── */
+  /* Stack email input and button vertically on mobile */
+  .cta-form {
+    flex-direction: column;
+  }
+
+  .cta-form .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── FOOTER ── */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ── SMALL MOBILE (≤ 480px) ── */
+@media (max-width: 480px) {
+  /* Single column products on very small screens */
+  .product-grid {
+    grid-template-columns: 1fr 1fr; /* 2 columns still works at 480px */
+    gap: var(--space-4);
+  }
+}
+
+
+/* ============================================================
+  15. ANIMATIONS & TRANSITIONS
+  ============================================================
+  CSS @keyframes define animations frame by frame.
+  The animation is applied via the animation property.
+============================================================ */
+
+/* FADE UP — used on section entry */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* .animate-fade-up applied by JavaScript's IntersectionObserver */
+.animate-fade-up {
+  animation: fadeUp 0.55s ease forwards;
+}
+
+/* Elements start invisible before animation triggers */
+.fade-up-ready {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* STAGGERED ANIMATION DELAYS
+   Each .delay-N class adds a delay so items animate in sequence,
+   not all at once. Used on trust items and feature cards.
+*/
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/*
+  REDUCED MOTION QUERY
+  ────────────────────
+  Some users prefer no animation (vestibular disorders, focus issues).
+  @media (prefers-reduced-motion: reduce) respects that OS preference
+  and disables animations for those users. This is an accessibility requirement.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Keep parallax off for users who prefer reduced motion */
+  #hero {
+    background-attachment: scroll;
+  }
+}

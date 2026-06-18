@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  FILE: index.html
+  PURPOSE: Main HTML structure for "DRAPE" — Online Clothing Store
+  
+  WEB PAGE ANATOMY GUIDE
+  ============================================================
+  A landing page is made up of several semantic sections, each
+  serving a distinct purpose in guiding the visitor's journey:
+
+    1. <head>        — Meta info, title, CSS/font links (invisible to user)
+    2. <header>      — Site identity + navigation bar
+    3. <section#hero>        — First impression / value proposition
+    4. <section#trust>       — Social proof via numbers/stats
+    5. <section#products>    — Core offering (product showcase)
+    6. <section#features>    — Why choose us (benefits)
+    7. <section#about>       — Brand story / personality
+    8. <section#cta>         — Call-to-action (conversion goal)
+    9. <footer>      — Links, legal, secondary navigation
+
+  HTML uses SEMANTIC TAGS — tags that describe their own meaning.
+  This helps browsers, screen readers, and search engines understand
+  the page structure beyond just its visual appearance.
+  ============================================================
+-->
+<html lang="en">
+
+<head>
+  <!--
+    META TAGS
+    ─────────
+    These live in <head> and are NOT visible on screen.
+    They communicate with browsers, search engines, and social platforms.
+  -->
+
+  <!-- Sets character encoding to UTF-8 — supports all languages/symbols -->
+  <meta charset="UTF-8">
+
+  <!-- 
+    Viewport meta tag: critical for responsive (mobile-friendly) design.
+    "width=device-width" = match the screen's actual width.
+    "initial-scale=1.0" = don't zoom in/out on load.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO: Short description shown in Google search results -->
+  <meta name="description"
+    content="DRAPE — Thoughtfully made clothing for modern living. Shop new arrivals in women's and men's fashion.">
+
+  <!-- The browser tab title and SEO page title -->
+  <title>DRAPE — Modern Clothing</title>
+
+  <!--
+    EXTERNAL FONT LINK
+    ──────────────────
+    Google Fonts are loaded via a <link> tag in <head>.
+    We're importing two typefaces:
+      • "Playfair Display" — elegant serif for headings (brand personality)
+      • "Inter"           — clean sans-serif for body text (readability)
+    The "preconnect" links speed up the font load by pre-establishing
+    a connection to Google's font servers before the browser needs them.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!--
+    STYLESHEET LINK
+    ───────────────
+    Links the external CSS file to this HTML document.
+    "rel=stylesheet" tells the browser this link is a CSS file.
+    href points to the file path (same folder here).
+  -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<!--
+  ============================================================
+  <body> — Everything visible on the page lives here
+  ============================================================
+-->
+<body>
+
+  <!-- =====================================================
+    COMPONENT 1: HEADER / NAVIGATION BAR
+    =====================================================
+    The <header> tag is a semantic landmark for the top of the page.
+    It typically contains:
+      - Brand logo or name
+      - Primary navigation links (<nav> + <ul>/<li>/<a>)
+      - Action buttons (e.g., cart, login)
+    
+    The "id" attribute ("main-header") lets JavaScript and CSS
+    target this specific element.
+
+    Accessibility note: <nav> with aria-label tells screen
+    readers this is the primary navigation landmark.
+  -->
+  <header id="main-header">
+    <div class="container header-inner">
+
+      <!-- LOGO: Brand name as a text-based logo. In production,
+           this could be an <img> tag with an SVG or PNG logo. -->
+      <a href="#" class="logo" aria-label="DRAPE Home">
+        DRAPE
+      </a>
+
+      <!-- 
+        NAVIGATION: <nav> is a semantic tag for navigation links.
+        <ul> (unordered list) + <li> (list item) + <a> (anchor/link)
+        is the standard, accessible pattern for nav menus.
+        href="#section-id" = smooth-scrolls to that section on the page.
+      -->
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#products">Shop</a></li>
+          <li><a href="#features">Why DRAPE</a></li>
+          <li><a href="#about">Our Story</a></li>
+          <li><a href="#cta" class="nav-cta">Get 20% Off</a></li>
+        </ul>
+      </nav>
+
+      <!-- HEADER ACTIONS: Cart and hamburger menu button -->
+      <div class="header-actions">
+
+        <!-- Cart icon button: aria-label describes it for screen readers -->
+        <button class="cart-btn" aria-label="View shopping cart">
+          <!-- SVG icon for the cart — inline SVG is crisp at any size -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
+          </svg>
+          <!-- Cart item count badge -->
+          <span class="cart-count" aria-label="3 items in cart">3</span>
+        </button>
+
+        <!-- 
+          HAMBURGER MENU BUTTON: Only visible on mobile screens (via CSS).
+          "aria-expanded" tells screen readers whether the menu is open/closed.
+          "aria-controls" links this button to the nav it controls.
+          JavaScript toggles these attributes and the menu's visibility.
+        -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false"
+          aria-controls="nav-links">
+          <!-- Three lines = hamburger icon pattern -->
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+    COMPONENT 2: HERO SECTION
+    =====================================================
+    The HERO is the first thing a visitor sees — it must instantly
+    communicate: WHO you are, WHAT you offer, and WHY it matters.
+    
+    Anatomy of a great hero:
+      • Eyebrow label  — context setter ("New Collection")
+      • Headline       — bold value proposition
+      • Sub-headline   — 1-2 sentence elaboration
+      • CTA button(s)  — the primary action you want taken
+      • Visual         — image, video, or illustration
+    
+    "style" attribute here injects a CSS background-image inline.
+    In a real project, use a real image URL or serve via CSS.
+    The placeholder below uses placehold.co — a free placeholder service.
+  -->
+  <section id="hero"
+    style="background-image: url('https://placehold.co/1600x900/2c2c2c/ffffff?text=Hero+Background+Image');"
+    aria-label="Hero Section">
+
+    <!-- Dark overlay div — sits between the image and text for readability -->
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content">
+
+      <!-- Eyebrow: small label above the headline to set context -->
+      <span class="hero-eyebrow">Summer 2025 Collection</span>
+
+      <!-- 
+        Main headline: The <h1> tag is the most important heading on the page.
+        There should only be ONE <h1> per page for proper SEO structure.
+        <em> adds italic emphasis to "effortlessly" for stylistic effect.
+      -->
+      <h1 class="hero-title">Dress <em>effortlessly</em>,<br>live boldly.</h1>
+
+      <!-- Supporting description text -->
+      <p class="hero-subtitle">Thoughtfully made clothing designed for real life —
+        from early mornings to late evenings.</p>
+
+      <!-- CTA BUTTONS GROUP: Primary + secondary action -->
+      <div class="hero-actions">
+        <!-- Primary CTA: The main action. Highest visual prominence. -->
+        <a href="#products" class="btn btn-primary">Shop New Arrivals</a>
+        <!-- Secondary CTA: Less urgent, lower visual weight -->
+        <a href="#about" class="btn btn-ghost">Our Story</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+    COMPONENT 3: TRUST / METRICS STRIP
+    =====================================================
+    A "trust strip" is a horizontal band of social proof data — 
+    numbers that validate your brand's credibility at a glance.
+    Visitors scan these quickly; they must be bold and believable.
+    
+    Pattern: Big NUMBER → small LABEL → optional description
+    
+    Common metrics: customers served, products, years in business,
+    countries shipped, satisfaction ratings, etc.
+  -->
+  <section id="trust" aria-label="Trust Metrics">
+    <div class="container trust-grid">
+
+      <!-- Each .trust-item is one stat block -->
+      <div class="trust-item">
+        <!-- The number — styled large and bold in CSS -->
+        <span class="trust-number" data-target="48000">0</span>
+        <!-- The label below the number -->
+        <span class="trust-label">Happy Customers</span>
+      </div>
+
+      <!-- Vertical divider between stats (CSS-created decorative element) -->
+      <div class="trust-divider" aria-hidden="true"></div>
+
+      <div class="trust-item">
+        <span class="trust-number" data-target="320">0</span>
+        <span class="trust-label">Styles Available</span>
+      </div>
+
+      <div class="trust-divider" aria-hidden="true"></div>
+
+      <div class="trust-item">
+        <span class="trust-number" data-target="12">0</span>
+        <span class="trust-label">Years of Craft</span>
+      </div>
+
+      <div class="trust-divider" aria-hidden="true"></div>
+
+      <div class="trust-item">
+        <!-- A rating can't be animated like a number, so it's static -->
+        <span class="trust-number static">4.9★</span>
+        <span class="trust-label">Average Rating</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+    COMPONENT 4: PRODUCT SECTION
+    =====================================================
+    This is the CORE CONTENT section — where you showcase 
+    what you're selling. Key sub-components:
+    
+      • Section header (label + title + description)
+      • Product GRID — CSS Grid/Flexbox layout of cards
+      • Product CARD — repeatable unit with image, info, CTA
+      • "View All" link to full catalog
+    
+    Product card anatomy:
+      • Image container (with hover zoom effect)
+      • Badge (e.g., "New", "Sale") — optional
+      • Product name (<h3>)
+      • Price
+      • "Add to Cart" button
+  -->
+  <section id="products" aria-labelledby="products-title">
+    <div class="container">
+
+      <!-- SECTION HEADER: Reusable pattern used across all sections -->
+      <div class="section-header">
+        <span class="section-eyebrow">New Arrivals</span>
+        <h2 id="products-title" class="section-title">Fresh this season</h2>
+        <p class="section-desc">Carefully sourced pieces that blend comfort with style.</p>
+      </div>
+
+      <!-- 
+        PRODUCT GRID: CSS Grid container.
+        Each child .product-card becomes one grid cell.
+        The grid columns are defined in styles.css using auto-fill.
+      -->
+      <div class="product-grid">
+
+        <!-- ── PRODUCT CARD 1 ── -->
+        <article class="product-card" aria-label="Linen Oversized Shirt product">
+          <!-- 
+            <article> is used because each card is self-contained content.
+            It makes semantic sense — each product stands alone.
+          -->
+
+          <div class="card-image-wrap">
+            <!-- 
+              PLACEHOLDER IMAGE
+              src: placehold.co generates placeholder images with custom
+              dimensions, bg color, text color, and label text.
+              alt: Always describe the image for screen readers + SEO.
+              loading="lazy": Don't load this image until it's near viewport
+              (improves page load performance).
+            -->
+            <img src="https://placehold.co/400x500/e8e0d5/4a3728?text=Product+Image+1"
+              alt="Linen Oversized Shirt in off-white" loading="lazy">
+
+            <!-- BADGE: Small label for highlights like "New" or "Sale" -->
+            <span class="badge badge-new">New</span>
+
+            <!-- Quick-add button: appears on hover via CSS -->
+            <button class="quick-add" aria-label="Quick add Linen Oversized Shirt to cart">
+              + Quick Add
+            </button>
+          </div>
+
+          <!-- Card text content below the image -->
+          <div class="card-info">
+            <!-- Category label -->
+            <span class="card-category">Women's</span>
+            <!-- Product name -->
+            <h3 class="card-name">Linen Oversized Shirt</h3>
+            <!-- Price: <del> shows original price with strikethrough for sales -->
+            <div class="card-price">
+              <span class="price-current">₹2,499</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- ── PRODUCT CARD 2 ── -->
+        <article class="product-card" aria-label="Slim Chino Trousers product">
+          <div class="card-image-wrap">
+            <img src="https://placehold.co/400x500/c8d5e0/283848?text=Product+Image+2"
+              alt="Slim Chino Trousers in slate blue" loading="lazy">
+            <span class="badge badge-sale">Sale</span>
+            <button class="quick-add" aria-label="Quick add Slim Chino Trousers to cart">
+              + Quick Add
+            </button>
+          </div>
+          <div class="card-info">
+            <span class="card-category">Men's</span>
+            <h3 class="card-name">Slim Chino Trousers</h3>
+            <div class="card-price">
+              <!-- <del> = strikethrough (deleted) original price -->
+              <del class="price-original">₹3,299</del>
+              <span class="price-current sale">₹2,099</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- ── PRODUCT CARD 3 ── -->
+        <article class="product-card" aria-label="Knit Midi Dress product">
+          <div class="card-image-wrap">
+            <img src="https://placehold.co/400x500/d5e8d5/284828?text=Product+Image+3"
+              alt="Knit Midi Dress in sage green" loading="lazy">
+            <button class="quick-add" aria-label="Quick add Knit Midi Dress to cart">
+              + Quick Add
+            </button>
+          </div>
+          <div class="card-info">
+            <span class="card-category">Women's</span>
+            <h3 class="card-name">Knit Midi Dress</h3>
+            <div class="card-price">
+              <span class="price-current">₹3,799</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- ── PRODUCT CARD 4 ── -->
+        <article class="product-card" aria-label="Classic Crew Sweatshirt product">
+          <div class="card-image-wrap">
+            <img src="https://placehold.co/400x500/e8d5d5/482828?text=Product+Image+4"
+              alt="Classic Crew Sweatshirt in dusty rose" loading="lazy">
+            <span class="badge badge-new">New</span>
+            <button class="quick-add" aria-label="Quick add Classic Crew Sweatshirt to cart">
+              + Quick Add
+            </button>
+          </div>
+          <div class="card-info">
+            <span class="card-category">Unisex</span>
+            <h3 class="card-name">Classic Crew Sweatshirt</h3>
+            <div class="card-price">
+              <span class="price-current">₹2,899</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+      <!-- /product-grid -->
+
+      <!-- "View All" link — drives to the full catalog page -->
+      <div class="section-footer">
+        <a href="#" class="btn btn-outline">View All Styles
+          <!-- Arrow icon inside the button -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+    COMPONENT 5: FEATURES / BENEFITS SECTION
+    =====================================================
+    "Why choose us" — communicates your brand's differentiators.
+    This section counters objections and builds trust beyond numbers.
+    
+    Feature card anatomy:
+      • Icon (SVG, emoji, or image)
+      • Feature title (<h3>)
+      • Short description (<p>)
+    
+    Typically 3–6 features in a grid layout.
+    Icons should be simple, consistent in style and size.
+  -->
+  <section id="features" aria-labelledby="features-title">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-eyebrow">Why DRAPE</span>
+        <h2 id="features-title" class="section-title">Built around you</h2>
+        <p class="section-desc">Everything we do is designed to make great clothing easier to find and keep.</p>
+      </div>
+
+      <!-- Features grid — 3-column on desktop, stacks on mobile -->
+      <div class="features-grid">
+
+        <!-- ── FEATURE 1 ── -->
+        <div class="feature-card">
+          <!-- SVG icon: scalable, no pixelation, file-size efficient -->
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Sustainable Fabrics</h3>
+          <p class="feature-desc">Every piece is made with GOTS-certified organic cotton or recycled fibres.
+            Fashion that doesn't cost the earth.</p>
+        </div>
+
+        <!-- ── FEATURE 2 ── -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="1" y="3" width="15" height="13" rx="1" />
+              <path d="M16 8h4l3 3v5h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Free Shipping Over ₹999</h3>
+          <p class="feature-desc">Orders above ₹999 ship free across India. Express delivery available
+            with same-day dispatch before 2 PM.</p>
+        </div>
+
+        <!-- ── FEATURE 3 ── -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </div>
+          <h3 class="feature-title">30-Day Easy Returns</h3>
+          <p class="feature-desc">Didn't love it at home? Return or exchange within 30 days —
+            no questions asked, no hassle.</p>
+        </div>
+
+        <!-- ── FEATURE 4 ── -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Size Inclusive</h3>
+          <p class="feature-desc">From XS to 4XL across all styles. Every body deserves clothes
+            that fit beautifully and feel good.</p>
+        </div>
+
+        <!-- ── FEATURE 5 ── -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4l3 3" />
+            </svg>
+          </div>
+          <h3 class="feature-title">New Drops Weekly</h3>
+          <p class="feature-desc">Fresh styles land every Thursday. Subscribe to be first in line
+            before they sell out.</p>
+        </div>
+
+        <!-- ── FEATURE 6 ── -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+            </svg>
+          </div>
+          <h3 class="feature-title">Style Concierge</h3>
+          <p class="feature-desc">Chat with our human stylists 7 days a week. Get outfit advice,
+            size help, or just talk fashion.</p>
+        </div>
+
+      </div>
+      <!-- /features-grid -->
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+    COMPONENT 6: ABOUT SECTION
+    =====================================================
+    The About section humanises your brand. It answers:
+    "Who made this and why should I trust them?"
+    
+    Typically a two-column layout:
+      LEFT:  Image (founder photo, studio, product in-the-making)
+      RIGHT: Story text (origin, mission, values)
+    
+    On mobile, columns stack vertically (handled in CSS).
+  -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="container about-inner">
+
+      <!-- LEFT COLUMN: Image -->
+      <div class="about-image-wrap">
+        <!-- Placeholder image; replace with an actual brand photo -->
+        <img src="https://placehold.co/560x640/c8b89a/3d2b1f?text=Brand+Story+Image"
+          alt="DRAPE founder arranging garments in the studio" loading="lazy" class="about-image">
+
+        <!-- Floating accent card — small callout overlaid on the image -->
+        <div class="about-accent-card" aria-hidden="true">
+          <span class="accent-number">2013</span>
+          <span class="accent-label">Founded in Jaipur</span>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Story text -->
+      <div class="about-text">
+        <span class="section-eyebrow">Our Story</span>
+        <h2 id="about-title" class="section-title">Made with purpose,<br>worn with pride.</h2>
+
+        <!-- <p> tags for body paragraphs — each idea in its own paragraph -->
+        <p>DRAPE started in a small Jaipur studio in 2013, with one goal: make
+          clothes that feel as good as they look. We were tired of fast fashion that
+          fell apart after three washes — so we went back to craft.</p>
+
+        <p>We work directly with artisan weavers and ethical factories across Rajasthan
+          and Tamil Nadu. Every fabric is chosen for durability, comfort, and low impact
+          on the environment. No greenwashing — just honest clothing.</p>
+
+        <!-- VALUES LIST: <ul> for an unordered list of brand values -->
+        <ul class="about-values" aria-label="Our core values">
+          <li>
+            <!-- Checkmark icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              aria-hidden="true">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Ethical production from fibre to finish
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              aria-hidden="true">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Climate-neutral shipping since 2021
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              aria-hidden="true">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            1% of revenue to textile worker welfare funds
+          </li>
+        </ul>
+
+        <a href="#" class="btn btn-primary">Read Our Full Story</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+    COMPONENT 7: CTA (CALL-TO-ACTION) SECTION
+    =====================================================
+    The CTA section's ONLY job is to convert visitors.
+    It should:
+      • State a compelling offer clearly
+      • Have ONE primary action (not multiple)
+      • Feel urgent but not pushy
+    
+    Common CTA patterns:
+      • Email signup with discount incentive
+      • "Shop Now" with a time-limited deal
+      • Download / App install
+    
+    This section typically stands out visually (different bg color)
+    to break the page flow and signal "important moment."
+  -->
+  <section id="cta" aria-labelledby="cta-title">
+    <div class="container cta-inner">
+
+      <!-- Decorative background text (aria-hidden so screen readers skip it) -->
+      <span class="cta-bg-text" aria-hidden="true">DRAPE</span>
+
+      <div class="cta-content">
+        <span class="section-eyebrow light">Limited Time</span>
+        <h2 id="cta-title" class="cta-title">Get 20% off your<br>first order.</h2>
+        <p class="cta-subtitle">Join 48,000+ DRAPE members. No spam — just new drops,
+          styling tips, and exclusive member prices.</p>
+
+        <!-- 
+          EMAIL SIGNUP FORM
+          The <form> element wraps related inputs and a submit button.
+          action="#" = no real server endpoint (demo only).
+          In production, this would point to a newsletter API or backend route.
+          
+          INPUT TYPES explained:
+            type="email" — validates email format automatically
+            type="submit" — renders as a clickable submit button
+            required    — browser prevents submission if empty
+        -->
+        <form class="cta-form" action="#" aria-label="Email signup for discount">
+          <!-- Label hidden visually but available to screen readers -->
+          <label for="email-input" class="sr-only">Your email address</label>
+          <input type="email" id="email-input" name="email" placeholder="Your email address" required
+            aria-required="true" autocomplete="email">
+          <button type="submit" class="btn btn-primary">Claim 20% Off</button>
+        </form>
+
+        <!-- Fine print / trust note below the form -->
+        <p class="cta-fine-print">By subscribing you agree to our Privacy Policy. Unsubscribe anytime.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+    COMPONENT 8: FOOTER
+    =====================================================
+    The footer is the bottom of the page — a navigation aid
+    for users who've scrolled all the way through.
+    
+    Footer anatomy:
+      • Brand column (logo, tagline, social links)
+      • Link columns (grouped by category: Shop, Help, Company)
+      • Bottom bar (copyright, legal links, payment icons)
+    
+    <footer> is a semantic HTML5 landmark element.
+    Using role="contentinfo" reinforces its semantics.
+  -->
+  <footer role="contentinfo">
+    <div class="container">
+
+      <!-- MAIN FOOTER GRID: Brand + 3 link columns -->
+      <div class="footer-grid">
+
+        <!-- BRAND COLUMN -->
+        <div class="footer-brand">
+          <a href="#" class="logo footer-logo">DRAPE</a>
+          <p class="footer-tagline">Thoughtfully made clothing<br>for modern living.</p>
+
+          <!-- SOCIAL LINKS: anchor tags with SVG icons -->
+          <div class="social-links" aria-label="Social Media Links">
+
+            <a href="#" class="social-link" aria-label="Follow DRAPE on Instagram">
+              <!-- Instagram SVG icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+
+            <a href="#" class="social-link" aria-label="Follow DRAPE on Pinterest">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-13.58 5.06m11.2 10.64a4.99 4.99 0 01-5.66 3.51" />
+              </svg>
+            </a>
+
+            <a href="#" class="social-link" aria-label="Follow DRAPE on YouTube">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                aria-hidden="true">
+                <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42C1 8.14 1 12 1 12s0 3.86.46 5.58a2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96C23 15.86 23 12 23 12s0-3.86-.46-5.58z" />
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+              </svg>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- SHOP LINKS COLUMN -->
+        <div class="footer-col">
+          <!-- <h4> for column headings — maintains heading hierarchy -->
+          <h4 class="footer-col-title">Shop</h4>
+          <ul class="footer-links">
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Women's</a></li>
+            <li><a href="#">Men's</a></li>
+            <li><a href="#">Accessories</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+
+        <!-- HELP LINKS COLUMN -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Help</h4>
+          <ul class="footer-links">
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Track Your Order</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- COMPANY LINKS COLUMN -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Wholesale</a></li>
+          </ul>
+        </div>
+
+      </div>
+      <!-- /footer-grid -->
+
+      <!-- 
+        FOOTER BOTTOM BAR
+        Horizontal divider + copyright + legal links
+        <small> is semantically appropriate for fine print / legal text
+      -->
+      <div class="footer-bottom">
+        <small class="copyright">
+          <!-- &copy; is the HTML entity for the © copyright symbol -->
+          &copy; 2025 DRAPE Clothing Pvt. Ltd. All rights reserved.
+        </small>
+        <nav class="footer-legal" aria-label="Legal Links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Settings</a>
+        </nav>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- =====================================================
+    SCRIPT TAG — JavaScript file link
+    =====================================================
+    The <script> tag with src="script.js" links the external
+    JavaScript file to this HTML page.
+    
+    WHY AT THE BOTTOM?
+    Placing <script> at the end of <body> (just before </body>)
+    ensures the HTML is fully parsed and DOM elements exist
+    before JavaScript tries to find and manipulate them.
+    
+    If placed in <head>, JS would run before the page loads
+    and fail to find elements like buttons or nav links.
+    
+    Alternative: use "defer" attribute in <head>:
+    <script src="script.js" defer></script>
+    — this also waits for HTML to finish parsing.
+  -->
+  <script src="script.js"></script>
+
+</body>
+
+</html>
